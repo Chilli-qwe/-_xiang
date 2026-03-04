@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国香料发展史 - 江南烟雨</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Serif SC', 'SimSun', serif;
+            background:
+                linear-gradient(135deg, rgba(60, 60, 60, 0.5), rgba(40, 40, 40, 0.4)),
+                linear-gradient(to bottom, rgba(150, 150, 150, 0.3), rgba(180, 180, 180, 0.2)),
+                url('1.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-blend-mode: overlay;
+            min-height: 100vh;
+            color: #4a4a4a;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 烟雨效果背景 */
+        .mist-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .mist-layer {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.15"/></svg>');
+            opacity: 0.3;
+            animation: drift 60s linear infinite;
+        }
+
+        .mist-layer:nth-child(2) {
+            animation-direction: reverse;
+            animation-duration: 80s;
+            opacity: 0.2;
+        }
+
+        @keyframes drift {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* 雨滴效果 */
+        .rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .rain-drop {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: linear-gradient(transparent, rgba(150, 150, 150, 0.4));
+            animation: rain-fall linear infinite;
+        }
+
+        @keyframes rain-fall {
+            0% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+            animation: fadeInUp 1.5s ease-out;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            margin-bottom: 20px;
+            color: #5a5a5a;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #7a7a7a;
+            letter-spacing: 0.2em;
+            font-style: italic;
+        }
+
+        /* 时间线容器 */
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+        }
+
+        /* 中央线 */
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom,
+                transparent,
+                #a0a0a0 10%,
+                #a0a0a0 90%,
+                transparent
+            );
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 80px;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(200, 200, 200, 0.1), rgba(180, 180, 180, 0.05));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .timeline-content:hover::before {
+            opacity: 1;
+        }
+
+        .timeline-content:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+        }
+
+        .timeline-content.expanded {
+            width: 55%;
+            max-width: 600px;
+            z-index: 50;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content.expanded {
+            margin-right: auto;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content.expanded {
+            margin-left: auto;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #8a8a8a, #b0b0b0);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            border: 4px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .timeline-dot:hover {
+            transform: translateX(-50%) scale(1.3);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .timeline-dot.active {
+            background: linear-gradient(135deg, #a89080, #c8b0a0);
+            box-shadow: 0 0 40px rgba(168, 144, 128, 0.5);
+        }
+
+        .era {
+            font-size: 2rem;
+            font-weight: 300;
+            color: #6a6a6a;
+            margin-bottom: 10px;
+            letter-spacing: 0.1em;
+        }
+
+        .year {
+            font-size: 1rem;
+            color: #9a9a9a;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .title {
+            font-size: 1.4rem;
+            color: #5a5a5a;
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+
+        .description {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #6a6a6a;
+        }
+
+        /* 详细内容面板 */
+        .detail-panel {
+            max-height: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition: max-height 0.5s ease, padding 0.5s ease;
+            margin-top: 0;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(150, 150, 150, 0.3) transparent;
+        }
+
+        .detail-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .detail-panel::-webkit-scrollbar-track {
+            background: rgba(200, 200, 200, 0.1);
+            border-radius: 3px;
+        }
+
+        .detail-panel::-webkit-scrollbar-thumb {
+            background: rgba(150, 150, 150, 0.3);
+            border-radius: 3px;
+        }
+
+        .detail-panel.active {
+            max-height: 400px;
+            margin-top: 20px;
+            padding-top: 20px;
+            padding-right: 10px;
+            border-top: 1px solid rgba(150, 150, 150, 0.3);
+        }
+
+        .spice-images {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease 0.2s;
+        }
+
+        .detail-panel.active .spice-images {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .spice-card {
+            flex: 1 1 120px;
+            min-width: 100px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(200, 200, 200, 0.3);
+        }
+
+        .spice-card:hover {
+            transform: translateY(-5px) rotate(2deg);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .spice-emoji {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .spice-name {
+            font-size: 0.9rem;
+            color: #5a5a5a;
+            margin-bottom: 4px;
+        }
+
+        .spice-desc {
+            font-size: 0.75rem;
+            color: #7a7a7a;
+        }
+
+        /* 水墨装饰 */
+        .ink-decoration {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(ellipse at center, rgba(100, 100, 100, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(20px);
+        }
+
+        /* 背景装饰图案 */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.15;
+            background-image:
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.3'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            animation: patternMove 120s linear infinite;
+        }
+
+        @keyframes patternMove {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; }
+        }
+
+        /* 香料飘香背景 */
+        .spice-bg-decoration {
+            position: fixed;
+            font-size: 4rem;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatSpice 20s ease-in-out infinite;
+        }
+
+        @keyframes floatSpice {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-30px) rotate(5deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(-3deg);
+            }
+            75% {
+                transform: translateY(-40px) rotate(3deg);
+            }
+        }
+
+        /* 头部装饰图片 */
+        .header-decoration {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .header-decoration.left {
+            left: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="80"%3E🪵%3C/text%3E%3C/svg%3E') center/contain no-repeat;
+        }
+
+        .header-decoration.right {
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="80"%3E🌿%3C/text%3E%3C/svg%3E') center/contain no-repeat;
+        }
+
+        /* 山水背景装饰 */
+        .mountain-bg {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 300px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.1;
+            background:
+                linear-gradient(135deg, transparent 40%, rgba(100, 100, 100, 0.2) 50%, transparent 60%),
+                url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"%3E%3Cpath fill="%23666" fill-opacity="0.3" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,218.7C672,235,768,245,864,234.7C960,224,1056,192,1152,181.3C1248,171,1344,181,1392,186.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"%3E%3C/path%3E%3C/svg%3E') bottom center/cover no-repeat;
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7a7a7a;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 香料飘动动画 */
+        .floating-spice {
+            position: fixed;
+            font-size: 1.5rem;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0;
+            animation: spiceFloat 4s ease-out forwards;
+        }
+
+        @keyframes spiceFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-200px) rotate(360deg);
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+                letter-spacing: 0.2em;
+            }
+
+            .timeline::before {
+                left: 30px;
+            }
+
+            .timeline-item,
+            .timeline-item:nth-child(odd) {
+                flex-direction: column;
+                padding-left: 70px;
+            }
+
+            .timeline-content {
+                width: 100%;
+            }
+
+            .timeline-dot {
+                left: 30px;
+            }
+
+            .timeline-content.expanded {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 烟雨背景 -->
+    <div class="mist-bg">
+        <div class="mist-layer"></div>
+        <div class="mist-layer"></div>
+    </div>
+    <div class="bg-pattern"></div>
+    <div class="mountain-bg"></div>
+
+    <!-- 香料背景装饰 -->
+    <div class="spice-bg-decoration" style="top: 10%; left: 5%;">🌸</div>
+    <div class="spice-bg-decoration" style="top: 30%; right: 8%; animation-delay: -5s;">🪵</div>
+    <div class="spice-bg-decoration" style="top: 50%; left: 3%; animation-delay: -10s;">🌿</div>
+    <div class="spice-bg-decoration" style="top: 70%; right: 5%; animation-delay: -15s;">🍃</div>
+    <div class="spice-bg-decoration" style="top: 85%; left: 10%; animation-delay: -8s;">💨</div>
+
+    <div class="rain" id="rain"></div>
+
+    <div class="container">
+        <header>
+            <div class="header-decoration left"></div>
+            <div class="header-decoration right"></div>
+            <h1>香料华章</h1>
+            <p class="subtitle">千年芬芳，一脉传承</p>
+        </header>
+
+        <div class="timeline">
+            <!-- 先秦时期 -->
+            <div class="timeline-item" data-spices="🌿🍂">
+                <div class="timeline-content" onclick="toggleDetail(this)">
+                    <div class="era">先秦时期</div>
+                    <div class="year">公元前221年以前</div>
+                    <div class="title">香料初现 · 祭祀驱邪</div>
+                    <div class="description">
+                        早在先秦时期，香料已出现在中华大地上。《诗经》中记载了"采艾"、"采萧"等采集香草的情景。
+                        此时的香料主要用于祭祀、驱邪和医疗，是人与神明沟通的媒介。
+                    </div>
+                    <div class="detail-panel">
+                        <p style="color: #6a6a6a; line-height: 1.8;">
+                            这一时期的主要香料包括艾草、萧（蒿类）、兰、蕙等本土香草。
+                            《楚辞》中大量香草美人的比喻，反映了香料在文化中的重要地位。
+                            祭祀时焚烧香草，被认为能通达神明；日常生活中，人们佩戴香囊以避邪驱虫。
+                        </p>
+                        <div class="spice-images">
+                            <div class="spice-card">
+                                <span class="spice-emoji">🌿</span>
+                                <div class="spice-name">艾草</div>
+                                <div class="spice-desc">驱邪避疫</div>
+                            </div>
+                            <div class="spice-card">
+                                <span class="spice-emoji">🌸</span>
+                                <div class="spice-name">兰花</div>
+                                <div class="spice-desc">高洁之香</div>
+                            </div>
+                            <div class="spice-card">
+                                <span class="spice-emoji">🍃</span>
+                                <div class="spice-name">蕙草</div>
+                                <div class="spice-desc">香中之王</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-dot" onclick="toggleDetail(this.previousElementSibling)"></div>
+            </div>
+
+            <!-- 汉代 -->
+            <div class="timeline-item" data-spices="🪵💨">
+                <div class="timeline-content" onclick="toggleDetail(this)">
+                    <div class="era">汉代</div>
+                    <div class="year">公元前206年 - 公元220年</div>
+                    <div class="title">丝路开通 · 异香东来</div>
+                    <div class="description">
+                        张骞出使西域，丝绸之路开通，檀香、沉香等名贵香料开始传入中国。
+                        汉代宫廷盛行熏香，博山炉成为时代的象征。
+                    </div>
+                    <div class="detail-panel">
+                        <p style="color: #6a6a6a; line-height: 1.8;">
+                            汉武帝时期，随着丝绸之路的畅通，西域香料大量涌入中原。
+                            檀香来自印度，沉香通过南海传入，乳香、没药等也随之而来。
+                            博山炉以其精美的山峦造型和袅袅香烟，成为汉代香文化的代表器物。
+                        </p>
+                        <div class="spice-images">
+                            <div class="spice-card">
+                                <span class="spice-emoji">🪵</span>
+                                <div class="spice-name">檀香</div>
+                                <div class="spice-desc">来自西域</div>
+                            </div>
+                            <div class="spice-card">
+                                <span class="spice-emoji">🪨</span>
+                                <div class="spice-name">沉香</div>
+                                <div class="spice-desc">香中之冠</div>
+                            </div>
+                            <div class="spice-card">
+                                <span class="spice-emoji">⛰️</span>
+                                <div class="spice-name">博山炉</div>
+                                <div class="spice-desc">香器之珍</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-dot" onclick="toggleDetail(this.previousElementSibling)"></div>
+            </div>
+
+            <!-- 唐代 -->
+            <div class="timeline-item" data-spices="🌺🍵">
+                <div class="timeline-content" onclick="toggleDetail(this)">
+                    <div class="era">唐代</div>
+                    <div class="year">618年 - 907年</div>
+                    <div class="title">盛世芳华 · 香道大成</div>
+                    <div class="description">
+                        唐代是香文化的鼎盛时期，贵族以香为日常，文人以香寄情。
+                        佛教兴盛推动了香的使用，"香火"一词便源于此时期。
+                    </div>
+                    <div class="detail-panel">
+                        <p style="color: #6a6a6a; line-height: 1.8;">
+                            唐代长安是国际大都会，香料贸易繁荣。龙脑香、麝香、丁香等稀有香料成为贵族身份象征。
+                            李白、王维等诗人常在诗中吟咏香料，"香雾云鬟湿，清辉玉臂寒"流传千古。
+                            佛教的传播使焚香礼佛成为日常，供养三宝的香火延续至今。
+                        </p>
+                        <div class="spice-images">
+                            <div class="spice-card">
+                                <span class="spice-emoji">❄️</span>
+                                <div class="spice-name">龙脑香</div>
+                                <div class="spice-desc">冰清玉洁</div>
+                            </div>
+                            <div class="spice-card">
+                                <span class="spice-emoji">🦌</span>
+                                <div class="spice-name">麝香</div>
+                                <div class="spice-desc">浓香持久</div>
+                            </div>
+                            <div class="spice-card">
+                                <span class="spice-emoji">🌸</span>
+                                <div class="spice-name">玫瑰</div>
+                                <div class="spice-desc">花中皇后</div>
+                            </div>
+                            <div class="spice-card">
+                                <span class="spice-emoji">🍵</span>
+                                <div class="spice-name">茶香</div>
+                                <div class="spice-desc">禅茶一味</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-dot" onclick="toggleDetail(this.previousElementSibling)"></div>
+            </div>
+
+            <!-- 宋代 -->
+            <div class="timeline-item" data-spices="🏮🎋">
+                <div class="timeline-content" onclick="toggleDetail(this)">
+                    <div class="era">宋代</div>
+                    <div class="year">960年 - 1279年</div>
+                    <div class="title">文人雅韵 · 隔火熏香</div>
+                    <div class="description">
+                        宋代文人将香文化推向新高度，"四般闲事"——焚香、点茶、挂画、插花成为文人雅士的追求。
+                        隔火熏香技艺成熟，香道渐成体系。
+                    </div>
+                    <div class="detail-panel">
+                        <p style="color: #6a6a6a; line-height: 1.8;">
+                            宋代文人生活精致，香是书房必备。苏轼、黄庭坚都是香道高手，
+                            留下许多咏香诗词。"隔火熏香"是宋代发明的精致用香方法，
+                            通过云母片隔开炭火与香材，使香烟更加纯净优雅。
+                            《香谱》等专著的出现，标志着香学的成熟。
+                        </p>
+                        <div class="spice-images">
+                            <div class="spice-card">
+                                <span class="spice-emoji">🪨</span>
+                                <div class="spice-name">沉香</div>
+                                <div class="spice-desc">文人最爱</div>
+                            </div>
+                            <div class="spice-card">
+                                <span class="spice-emoji">🪵</span>
+                                <div class="spice-name">檀香</div>
+                                <div class="spice-desc">静心之香</div>
+                            </div>
+                            <div class="spice-card">
+                                <span class="spice-emoji">📜</span>
+                                <div class="spice-name">合香</div>
+                                <div class="spice-desc">调香技艺</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-dot" onclick="toggleDetail(this.previousElementSibling)"></div>
+            </div>
+
+            <!-- 明代 -->
+            <div class="timeline-item" data-spices="🌸🍊">
+                <div class="timeline-content" onclick="toggleDetail(this)">
+                    <div class="era">明代</div>
+                    <div class="year">1368年 - 1644年</div>
+                    <div class="title">香谱大成 · 民间普及</div>
+                    <div class="description">
+                        明代《香乘》问世，集历代香文化之大成。
+                        海上贸易繁荣，胡椒、肉桂等香料大量进口，香料走入寻常百姓家。
+                    </div>
+                    <div class="detail-panel">
+                        <p style="color: #6a6a6a; line-height: 1.8;">
+                            周嘉胄编撰的《香乘》是香学的集大成之作，收录了数百种香方。
+                            明代郑和下西洋，带回大量南洋香料，胡椒甚至成为货币流通。
+                            线香、塔香等方便使用的香制品开始普及，
+                            寺庙与民间的用香习惯逐渐形成今日之面貌。
+                        </p>
+                        <div class="spice-images">
+                            <div class="spice-card">
+                                <span class="spice-emoji">🌶️</span>
+                                <div class="spice-name">胡椒</div>
+                                <div class="spice-desc">黑色黄金</div>
+                            </div>
+                            <div class="spice-card">
+                                <span class="spice-emoji">🌿</span>
+                                <div class="spice-name">肉桂</div>
+                                <div class="spice-desc">温暖甘甜</div>
+                            </div>
+                            <div class="spice-card">
+                                <span class="spice-emoji">🏮</span>
+                                <div class="spice-name">线香</div>
+                                <div class="spice-desc">方便实用</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-dot" onclick="toggleDetail(this.previousElementSibling)"></div>
+            </div>
+
+            <!-- 清代至现代 -->
+            <div class="timeline-item" data-spices="🌏✨">
+                <div class="timeline-content" onclick="toggleDetail(this)">
+                    <div class="era">清代至今</div>
+                    <div class="year">1644年 - 至今</div>
+                    <div class="title">传承创新 · 香韵新生</div>
+                    <div class="description">
+                        清代宫廷用香达到极致，同时民间香铺遍布。近代虽经历波折，
+                        但传统香文化在新世纪焕发新生，古法技艺得以传承复兴。
+                    </div>
+                    <div class="detail-panel">
+                        <p style="color: #6a6a6a; line-height: 1.8;">
+                            清代造办处制作的香器精美绝伦，鼻烟壶、香囊等成为艺术精品。
+                            晚清民国时期，传统香文化一度式微。改革开放后，
+                            随着文化自信的提升，传统香文化重新受到重视。
+                            如今，从寺庙到家庭，从香水到香薰，中国香文化正以新的姿态走向世界。
+                        </p>
+                        <div class="spice-images">
+                            <div class="spice-card">
+                                <span class="spice-emoji">🧴</span>
+                                <div class="spice-name">香水</div>
+                                <div class="spice-desc">中西合璧</div>
+                            </div>
+                            <div class="spice-card">
+                                <span class="spice-emoji">🕯️</span>
+                                <div class="spice-name">香薰</div>
+                                <div class="spice-desc">现代生活</div>
+                            </div>
+                            <div class="spice-card">
+                                <span class="spice-emoji">🏯</span>
+                                <div class="spice-name">古法香</div>
+                                <div class="spice-desc">非遗传承</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-dot" onclick="toggleDetail(this.previousElementSibling)"></div>
+            </div>
+        </div>
+
+        <footer>
+            <p>—— 香道千年，一脉相承 ——</p>
+            <p style="margin-top: 10px; font-size: 0.8rem;">点击时间节点探索香料历史</p>
+        </footer>
+    </div>
+
+    <script>
+        // 创建雨滴效果
+        function createRain() {
+            const rain = document.getElementById('rain');
+            const dropCount = 50;
+
+            for (let i = 0; i < dropCount; i++) {
+                const drop = document.createElement('div');
+                drop.className = 'rain-drop';
+                drop.style.left = Math.random() * 100 + '%';
+                drop.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
+                drop.style.animationDelay = Math.random() * 2 + 's';
+                drop.style.opacity = Math.random() * 0.3 + 0.1;
+                rain.appendChild(drop);
+            }
+        }
+
+        // 时间节点展开/收起
+        function toggleDetail(element) {
+            const detailPanel = element.querySelector('.detail-panel');
+            const dot = element.nextElementSibling || element.parentElement.querySelector('.timeline-dot');
+            const spices = element.parentElement.dataset.spices || '✨';
+            const isExpanded = detailPanel.classList.contains('active');
+
+            // 关闭所有其他展开的面板
+            document.querySelectorAll('.detail-panel.active').forEach(panel => {
+                if (panel !== detailPanel) {
+                    panel.classList.remove('active');
+                    panel.closest('.timeline-content').classList.remove('expanded');
+                    const otherDot = panel.closest('.timeline-item').querySelector('.timeline-dot');
+                    if (otherDot) otherDot.classList.remove('active');
+                }
+            });
+
+            // 切换当前面板
+            if (isExpanded) {
+                detailPanel.classList.remove('active');
+                element.classList.remove('expanded');
+                if (dot) dot.classList.remove('active');
+            } else {
+                detailPanel.classList.add('active');
+                element.classList.add('expanded');
+                if (dot) dot.classList.add('active');
+
+                // 创建飘动的香料
+                createFloatingSpices(element);
+            }
+        }
+
+        // 创建飘动的香料动画
+        function createFloatingSpices(element) {
+            const rect = element.getBoundingClientRect();
+            const spices = ['🌿', '🌸', '🪵', '💨', '✨', '🍃'];
+
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const spice = document.createElement('div');
+                    spice.className = 'floating-spice';
+                    spice.textContent = spices[Math.floor(Math.random() * spices.length)];
+                    spice.style.left = (rect.left + Math.random() * rect.width) + 'px';
+                    spice.style.top = (rect.top + Math.random() * rect.height) + 'px';
+                    document.body.appendChild(spice);
+
+                    setTimeout(() => spice.remove(), 4000);
+                }, i * 100);
+            }
+        }
+
+        // 滚动动画
+        function handleScroll() {
+            const items = document.querySelectorAll('.timeline-item');
+
+            items.forEach((item, index) => {
+                const rect = item.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight * 0.8;
+
+                if (isVisible) {
+                    setTimeout(() => {
+                        item.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            createRain();
+            handleScroll();
+
+            // 添加水墨装饰
+            const container = document.querySelector('.container');
+            for (let i = 0; i < 5; i++) {
+                const decoration = document.createElement('div');
+                decoration.className = 'ink-decoration';
+                decoration.style.top = Math.random() * 80 + 10 + '%';
+                decoration.style.left = Math.random() * 80 + 10 + '%';
+                decoration.style.transform = `scale(${Math.random() * 3 + 0.5})`;
+                container.appendChild(decoration);
+            }
+
+            // 添加随机飘落的香料
+            const spices = ['🌿', '🌸', '🪵', '💨', '🍃', '✨', '🏮', '🎋'];
+            function createFallingSpice() {
+                const spice = document.createElement('div');
+                spice.style.cssText = `
+                    position: fixed;
+                    font-size: ${Math.random() * 20 + 15}px;
+                    left: ${Math.random() * 100}%;
+                    top: -50px;
+                    opacity: ${Math.random() * 0.15 + 0.05};
+                    pointer-events: none;
+                    z-index: 1;
+                    animation: fallSpice ${Math.random() * 10 + 15}s linear forwards;
+                `;
+                spice.textContent = spices[Math.floor(Math.random() * spices.length)];
+                document.body.appendChild(spice);
+                setTimeout(() => spice.remove(), 25000);
+            }
+
+            // 定期创建飘落的香料
+            setInterval(createFallingSpice, 3000);
+            for (let i = 0; i < 5; i++) {
+                setTimeout(createFallingSpice, i * 500);
+            }
+        });
+
+        window.addEventListener('scroll', handleScroll);
+
+        // 节点点击波纹效果
+        document.querySelectorAll('.timeline-dot').forEach(dot => {
+            dot.addEventListener('click', function(e) {
+                const ripple = document.createElement('div');
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                    background: rgba(168, 144, 128, 0.5);
+                    animation: ripple 0.6s ease-out;
+                    pointer-events: none;
+                `;
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // 添加波纹动画样式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                from {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+                to {
+                    transform: scale(3);
+                    opacity: 0;
+                }
+            }
+
+            @keyframes fallSpice {
+                0% {
+                    transform: translateY(0) rotate(0deg) translateX(0);
+                }
+                25% {
+                    transform: translateY(25vh) rotate(90deg) translateX(20px);
+                }
+                50% {
+                    transform: translateY(50vh) rotate(180deg) translateX(-20px);
+                }
+                75% {
+                    transform: translateY(75vh) rotate(270deg) translateX(20px);
+                }
+                100% {
+                    transform: translateY(110vh) rotate(360deg) translateX(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
