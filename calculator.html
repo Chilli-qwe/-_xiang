@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>香方配比计算器</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background: #f5efe9;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 16px;
+        }
+        .card {
+            background: white;
+            max-width: 500px;
+            width: 100%;
+            border-radius: 24px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            padding: 28px 24px;
+        }
+        h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-weight: 500;
+            color: #3a2c1f;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #e4d8cc;
+            padding-bottom: 12px;
+        }
+        h2::before {
+            content: "🌿";
+            font-size: 1.6rem;
+        }
+        .ingredient {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .ingredient label {
+            width: 70px;
+            color: #5a4a3a;
+            font-weight: 500;
+        }
+        .ingredient input {
+            flex: 2;
+            min-width: 100px;
+            padding: 10px 12px;
+            border: 1px solid #dcd0c4;
+            border-radius: 40px;
+            font-size: 1rem;
+            background: #fcf9f6;
+            transition: 0.2s;
+        }
+        .ingredient input:focus {
+            border-color: #b98e6b;
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(185, 142, 107, 0.1);
+        }
+        .percentage-badge {
+            flex: 1;
+            min-width: 70px;
+            background: #f0e8e0;
+            border-radius: 40px;
+            padding: 8px 12px;
+            font-size: 0.95rem;
+            text-align: center;
+            color: #3e2f21;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+        .total-row {
+            background: #f4ede5;
+            padding: 14px 16px;
+            border-radius: 40px;
+            margin: 24px 0 16px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            color: #2d241c;
+        }
+        .advice-box {
+            background: #fff3e9;
+            border-left: 4px solid #b98e6b;
+            padding: 16px 18px;
+            border-radius: 20px;
+            color: #3a2f27;
+            margin: 18px 0 22px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        .advice-box strong {
+            color: #7a5a3e;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1.1rem;
+        }
+        button {
+            background: white;
+            border: 1.5px solid #b98e6b;
+            color: #7a5a3e;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.15s;
+            width: 100%;
+            letter-spacing: 0.5px;
+        }
+        button:hover {
+            background: #b98e6b;
+            color: white;
+            border-color: #b98e6b;
+        }
+        .footnote {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #9b8a7a;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>香方配比计算器</h2>
+
+        <!-- 沉香 -->
+        <div class="ingredient">
+            <label>沉香</label>
+            <input type="number" id="agarwood" value="10" step="0.1" min="0">
+            <span class="percentage-badge" id="p_agarwood">43.48%</span>
+        </div>
+        <!-- 檀香 -->
+        <div class="ingredient">
+            <label>檀香</label>
+            <input type="number" id="sandalwood" value="8" step="0.1" min="0">
+            <span class="percentage-badge" id="p_sandalwood">34.78%</span>
+        </div>
+        <!-- 乳香 -->
+        <div class="ingredient">
+            <label>乳香</label>
+            <input type="number" id="frankincense" value="3" step="0.1" min="0">
+            <span class="percentage-badge" id="p_frankincense">13.04%</span>
+        </div>
+        <!-- 龙脑 -->
+        <div class="ingredient">
+            <label>龙脑</label>
+            <input type="number" id="borneol" value="2" step="0.1" min="0">
+            <span class="percentage-badge" id="p_borneol">8.70%</span>
+        </div>
+
+        <!-- 总重量 -->
+        <div class="total-row">
+            <span>⚖️ 总重量</span>
+            <span id="totalWeight">23.0</span> g
+        </div>
+
+        <!-- 建议输出区 -->
+        <div class="advice-box">
+            <strong>📜 配比建议</strong>
+            <span id="adviceText">所有香材比例适宜，香方和谐。</span>
+        </div>
+
+        <!-- 重置按钮 -->
+        <button id="resetBtn">重置默认配比</button>
+        <div class="footnote">点击数字框可修改克数，实时计算比例</div>
+    </div>
+
+    <script>
+        (function() {
+            // 获取DOM元素
+            const agarwood = document.getElementById('agarwood');
+            const sandalwood = document.getElementById('sandalwood');
+            const frankincense = document.getElementById('frankincense');
+            const borneol = document.getElementById('borneol');
+
+            const pAgarwood = document.getElementById('p_agarwood');
+            const pSandalwood = document.getElementById('p_sandalwood');
+            const pFrankincense = document.getElementById('p_frankincense');
+            const pBorneol = document.getElementById('p_borneol');
+
+            const totalSpan = document.getElementById('totalWeight');
+            const adviceSpan = document.getElementById('adviceText');
+            const resetBtn = document.getElementById('resetBtn');
+
+            // 预设规则 (名称, 最小占比, 最大占比)
+            const rules = [
+                { id: 'agarwood', name: '沉香', min: 0.30, max: 0.50 },
+                { id: 'sandalwood', name: '檀香', min: 0.20, max: 0.40 },
+                { id: 'frankincense', name: '乳香', min: 0.05, max: 0.15 },
+                { id: 'borneol', name: '龙脑', min: 0.02, max: 0.10 }
+            ];
+
+            // 获取所有输入值的数组 (已校正为合法数字)
+            function getCleanValues() {
+                let vals = [
+                    parseFloat(agarwood.value) || 0,
+                    parseFloat(sandalwood.value) || 0,
+                    parseFloat(frankincense.value) || 0,
+                    parseFloat(borneol.value) || 0
+                ];
+                // 确保不为负数，若负数则置0并更新输入框
+                vals = vals.map(v => v < 0 ? 0 : v);
+                agarwood.value = vals[0];
+                sandalwood.value = vals[1];
+                frankincense.value = vals[2];
+                borneol.value = vals[3];
+                return vals;
+            }
+
+            // 更新所有显示 (百分比、总重、建议)
+            function updateDisplay() {
+                const vals = getCleanValues();
+                const total = vals.reduce((a, b) => a + b, 0);
+                totalSpan.textContent = total.toFixed(2);
+
+                // 处理总重量为0的情况
+                if (total === 0) {
+                    pAgarwood.textContent = '0%';
+                    pSandalwood.textContent = '0%';
+                    pFrankincense.textContent = '0%';
+                    pBorneol.textContent = '0%';
+                    adviceSpan.textContent = '请至少输入一种香材的克数';
+                    return;
+                }
+
+                // 计算各香材占比并更新百分比显示
+                const percents = vals.map(v => (v / total) * 100);
+                pAgarwood.textContent = percents[0].toFixed(2) + '%';
+                pSandalwood.textContent = percents[1].toFixed(2) + '%';
+                pFrankincense.textContent = percents[2].toFixed(2) + '%';
+                pBorneol.textContent = percents[3].toFixed(2) + '%';
+
+                // 生成配比建议
+                const adviceMessages = [];
+                const percentValues = percents.map(p => p / 100); // 转为小数
+
+                rules.forEach((rule, index) => {
+                    const ratio = percentValues[index];
+                    const pctFormatted = (ratio * 100).toFixed(2) + '%';
+                    if (ratio === 0 && rule.min > 0) {
+                        adviceMessages.push(`缺少${rule.name}，可考虑加入少量`);
+                    } else if (ratio > 0 && ratio < rule.min) {
+                        adviceMessages.push(`${rule.name}占比${pctFormatted}，低于建议下限${(rule.min*100).toFixed(0)}%`);
+                    } else if (ratio > rule.max) {
+                        adviceMessages.push(`${rule.name}占比${pctFormatted}，超过建议上限${(rule.max*100).toFixed(0)}%`);
+                    }
+                });
+
+                if (adviceMessages.length === 0) {
+                    adviceSpan.textContent = '所有香材比例适宜，香方和谐。';
+                } else {
+                    adviceSpan.textContent = '⚠️ ' + adviceMessages.join('；');
+                }
+            }
+
+            // 重置为默认演示数值
+            function resetToDefault() {
+                agarwood.value = 10;
+                sandalwood.value = 8;
+                frankincense.value = 3;
+                borneol.value = 2;
+                updateDisplay();
+            }
+
+            // 添加事件监听
+            [agarwood, sandalwood, frankincense, borneol].forEach(input => {
+                input.addEventListener('input', updateDisplay);
+            });
+            resetBtn.addEventListener('click', resetToDefault);
+
+            // 页面加载时执行一次，确保显示正确
+            updateDisplay();
+        })();
+    </script>
+</body>
+</html>

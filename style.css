@@ -1,0 +1,350 @@
+/* =========================================
+   1. 全局变量：江南烟雨色系 (Rainy Jiangnan Palette)
+   ========================================= */
+:root {
+    /* 核心色彩：青灰调 */
+    --mist-dark: #4A585E;       /* 浓青墨：标题/深色文字 (如雨云) */
+    --mist-main: #6B7C82;       /* 标准青灰：主要元素 (如远山) */
+    --mist-light: #94A3A8;      /* 淡青灰：辅助文字/边框 (如薄雾) */
+    --mist-pale: #CFD8DC;       /* 极淡青：背景装饰 (如雨丝) */
+    
+    /* 背景与点缀 */
+    --paper-bg: #F2F4F5;        /* 雨过天青纸：带极淡冷调的宣纸白 */
+    --accent-moss: #556B60;     /* 苔藓绿：点缀色 (比红色更内敛，符合烟雨感) */
+    --accent-warm: #BFA696;     /* 枯茶色：少量用于平衡冷色调 (如干枯的莲蓬) */
+
+    /* 字体设置 */
+    --font-title: "Kaiti SC", "STKaiti", "KaiTi", serif; 
+    --font-body: "Songti SC", "SimSun", "Noto Serif SC", serif;
+
+    /* 动效：如雨丝滑落般流畅 */
+    --transition-rain: all 0.8s cubic-bezier(0.22, 1, 0.36, 1); 
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background-color: var(--paper-bg);
+    /* 增强噪点纹理，模拟湿润纸张的颗粒感 */
+    background-image: 
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.12'/%3E%3C/svg%3E"),
+        linear-gradient(to bottom, #F2F4F5 0%, #E8ECEF 100%); /* 顶部稍亮，底部稍暗，模拟天色 */
+    color: var(--mist-dark);
+    font-family: var(--font-body);
+    line-height: 1.9;
+    overflow-x: hidden;
+}
+
+/* =========================================
+   2. 排版：青墨书香 (Typography)
+   ========================================= */
+h1, h2, h3 {
+    font-family: var(--font-title);
+    font-weight: normal;
+    letter-spacing: 0.2em;
+    color: var(--mist-dark);
+    text-shadow: 0 2px 4px rgba(93, 109, 117, 0.15); /* 淡淡的青影 */
+}
+
+h2 {
+    font-size: 2.6rem;
+    text-align: center;
+    margin-bottom: 4rem;
+    position: relative;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* 标题下方的装饰：不再是红印，而是一抹青痕或水滴 */
+h2::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--mist-main), transparent);
+    margin: 20px auto 0;
+    border-radius: 50%;
+    opacity: 0.6;
+    box-shadow: 0 0 15px var(--mist-light);
+}
+
+p {
+    color: var(--mist-main);
+    font-size: 1.15rem;
+    text-align: justify;
+}
+
+/* =========================================
+   3. 导航栏：雨雾朦胧 (Navigation)
+   ========================================= */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 25px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* 半透明青灰背景，模拟雾气 */
+    background: rgba(242, 244, 245, 0.85);
+    backdrop-filter: blur(8px); 
+    z-index: 1000;
+    border-bottom: 1px solid rgba(93, 109, 117, 0.1);
+}
+
+.logo {
+    font-family: var(--font-title);
+    font-size: 2rem;
+    color: var(--mist-dark);
+    font-weight: bold;
+    /* 让Logo看起来像写在湿纸上 */
+    filter: contrast(1.1); 
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 50px;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: var(--mist-main);
+    font-family: var(--font-title);
+    font-size: 1.15rem;
+    position: relative;
+    padding: 8px 0;
+    transition: var(--transition-rain);
+}
+
+/* 悬停效果：青墨晕开 */
+.nav-links li a::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 100%;
+    background: radial-gradient(ellipse at center, rgba(107, 124, 130, 0.15) 0%, transparent 70%);
+    transform: translateX(-50%) scaleY(0.3);
+    transition: var(--transition-rain);
+    z-index: -1;
+    border-radius: 4px;
+}
+
+.nav-links li a:hover {
+    color: var(--mist-dark);
+    text-shadow: 0 0 8px rgba(93, 109, 117, 0.4);
+}
+
+.nav-links li a:hover::before {
+    width: 120%;
+    height: 100%;
+    transform: scaleY(1);
+}
+
+/* =========================================
+   4. 板块布局 (Layout)
+   ========================================= */
+section {
+    min-height: 100vh;
+    padding: 120px 15%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+/* 偶数板块：增加一层淡淡的青纱遮罩 */
+section:nth-child(even) {
+    background: linear-gradient(135deg, rgba(107, 124, 130, 0.03) 0%, transparent 50%);
+}
+
+/* =========================================
+   5. 特定板块样式 (Specific Styles)
+   ========================================= */
+
+/* 首页：烟雨入江南 */
+#home {
+    text-align: center;
+    align-items: center;
+    /* 模拟远处山峦的渐变背景 */
+    background: 
+        radial-gradient(circle at 50% 30%, rgba(255,255,255,0.6) 0%, transparent 60%),
+        linear-gradient(to bottom, transparent 60%, rgba(107, 124, 130, 0.05) 100%);
+}
+
+#home h1 {
+    font-size: 4.5rem;
+    margin-bottom: 25px;
+    /* 文字内部微渐变，像墨色未干 */
+    background: linear-gradient(to bottom, var(--mist-dark), var(--mist-main));
+    /* 1. 必须设置背景 (渐变或图片) */
+    background: linear-gradient(to right, #4A585E, #94A3A8); 
+    
+    /* 2. 必须把文字颜色设为透明，否则背景会被文字颜色盖住 */
+    color: transparent; 
+    -webkit-text-fill-color: transparent; /* 兼容旧版 Webkit */
+
+    /* 3. 裁剪背景到文字 */
+    background-clip: text;       /* 标准写法 (未来兼容) */
+    -webkit-background-clip: text; /* 当前主流浏览器必需 */
+    
+    /* 可选：防止文字换行时背景错位 */
+    display: inline-block; 
+    opacity: 0.9;
+    
+    
+
+}
+
+#home .subtitle {
+    font-size: 1.6rem;
+    color: var(--mist-light);
+    font-family: var(--font-title);
+    margin-bottom: 60px;
+    letter-spacing: 0.3em;
+}
+
+/* 技艺 & 历史：图片处理 */
+img, .image-placeholder {
+    border-radius: 2px;
+    /* 给所有图片加一层青灰色滤镜，统一色调 */
+    filter: grayscale(40%) sepia(20%) hue-rotate(160deg) saturate(80%); 
+    transition: var(--transition-rain);
+    box-shadow: 0 10px 30px rgba(93, 109, 117, 0.15);
+}
+
+img:hover, .image-placeholder:hover {
+    filter: grayscale(10%) sepia(10%); /* 悬停时恢复少许色彩 */
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(93, 109, 117, 0.25);
+}
+
+/* 香材卡片：如雨滴般的质感 */
+#ingredients .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 50px;
+    margin-top: 50px;
+}
+
+.ingredient-card {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 40px 30px;
+    border: 1px solid rgba(148, 163, 168, 0.2);
+    text-align: center;
+    transition: var(--transition-rain);
+    position: relative;
+}
+
+/* 卡片悬停：像被雨水打湿，颜色变深 */
+.ingredient-card:hover {
+    background: #fff;
+    border-color: var(--mist-light);
+    box-shadow: 0 20px 40px rgba(93, 109, 117, 0.1);
+    transform: translateY(-8px);
+}
+
+.ingredient-card h3 {
+    color: var(--mist-dark);
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.ingredient-card p {
+    font-size: 1rem;
+    color: var(--mist-main);
+}
+
+/* 体验按钮：青苔石质感 */
+#experience {
+    text-align: center;
+}
+
+.ink-btn {
+    display: inline-block;
+    padding: 18px 50px;
+    font-family: var(--font-title);
+    font-size: 1.3rem;
+    color: #fff;
+    /* 青灰色渐变背景 */
+    background: linear-gradient(135deg, var(--mist-main), var(--mist-dark));
+    border: none;
+    border-radius: 4px; /* 略带圆角，像鹅卵石 */
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition-rain);
+    box-shadow: 0 8px 20px rgba(93, 109, 117, 0.3);
+    letter-spacing: 0.1em;
+}
+
+/* 按钮悬停：泛起水光 */
+.ink-btn:hover {
+    background: linear-gradient(135deg, var(--mist-dark), #3E4A4F);
+    box-shadow: 0 0 25px rgba(107, 124, 130, 0.5);
+    transform: scale(1.03);
+}
+
+.ink-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+    transform: rotate(45deg) translateX(-100%);
+    transition: 0.6s;
+}
+
+.ink-btn:hover::after {
+    transform: rotate(45deg) translateX(100%);
+}
+
+/* 关于：极简收尾 */
+#about {
+    min-height: 60vh;
+    text-align: center;
+    border-top: 1px solid rgba(148, 163, 168, 0.3);
+    background: linear-gradient(to top, rgba(107, 124, 130, 0.05), transparent);
+}
+
+.footer-note {
+    font-size: 0.95rem;
+    color: var(--mist-light);
+    margin-top: 30px;
+    font-style: italic;
+}
+
+/* =========================================
+   6. 动画：雨丝飘落 (Rain Animation)
+   ========================================= */
+@keyframes rainDrop {
+    0% { transform: translateY(-20px) scaleY(1.5); opacity: 0; }
+    20% { opacity: 0.4; }
+    100% { transform: translateY(100px) scaleY(1); opacity: 0; }
+}
+
+.rain-line {
+    position: absolute;
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--mist-light), transparent);
+    top: -100px;
+    animation: rainDrop 2s infinite linear;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+    :root { --font-title: "KaiTi", serif; }
+    h1 { font-size: 3rem !important; }
+    h2 { font-size: 2rem !important; }
+    .navbar { padding: 20px; flex-direction: column; gap: 20px; }
+    .nav-links { gap: 25px; flex-wrap: wrap; justify-content: center; }
+    section { padding: 80px 5%; }
+}

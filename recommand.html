@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>节气用香 · 顺时养息</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background: #f2ebe5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            width: 100%;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(4px);
+            border-radius: 36px;
+            box-shadow: 0 20px 40px -10px rgba(80, 60, 40, 0.2);
+            padding: 32px 28px;
+            border: 1px solid #ece1d6;
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: 450;
+            color: #2f4b3c;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
+            border-bottom: 2px solid #dccfbf;
+            padding-bottom: 16px;
+        }
+        h1::before {
+            content: "🍃";
+            font-size: 2.2rem;
+        }
+        .current-term {
+            background: #e6daca;
+            border-radius: 100px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            color: #2e3b2b;
+            font-weight: 500;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .current-label {
+            background: #3e5d4a;
+            color: #f9f1e7;
+            border-radius: 40px;
+            padding: 6px 18px;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+        }
+        .term-name-big {
+            font-size: 2rem;
+            font-weight: 500;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            color: #274131;
+        }
+        .scent-name {
+            font-size: 1.8rem;
+            font-weight: 350;
+            color: #6b4f38;
+            margin-bottom: 20px;
+            border-left: 5px solid #b38e6b;
+            padding-left: 18px;
+        }
+        .ingredients {
+            background: #fcf6f0;
+            border-radius: 28px;
+            padding: 20px 24px;
+            margin: 24px 0;
+            border: 1px solid #decbb8;
+        }
+        .ingredients h3 {
+            font-weight: 500;
+            color: #4a6b57;
+            margin-bottom: 14px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ingredients h3::before {
+            content: "🌾";
+            font-size: 1.5rem;
+        }
+        .ingredient-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 18px;
+            list-style: none;
+        }
+        .ingredient-list li {
+            background: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            border: 1px solid #ecd9c6;
+            color: #4f3e2c;
+        }
+        .effect {
+            background: #dde9df;
+            border-radius: 24px;
+            padding: 16px 22px;
+            color: #1e3b2c;
+            margin: 20px 0 28px;
+            font-style: italic;
+            border-left: 8px solid #718e6f;
+            line-height: 1.6;
+        }
+        .selector-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+        .selector-area label {
+            font-weight: 600;
+            color: #4e6b5a;
+        }
+        select {
+            flex: 1;
+            min-width: 240px;
+            padding: 14px 20px;
+            border-radius: 60px;
+            border: 1px solid #c9b6a2;
+            background: white;
+            font-size: 1rem;
+            color: #2c3e30;
+            cursor: pointer;
+            outline: none;
+            transition: 0.2s;
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%236b4f38" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 20px center;
+            background-size: 16px;
+        }
+        select:hover, select:focus {
+            border-color: #a58362;
+            box-shadow: 0 0 0 3px rgba(165, 131, 98, 0.15);
+        }
+        .reset-today {
+            background: #f3e5d8;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 60px;
+            font-weight: 600;
+            color: #4a5d48;
+            cursor: pointer;
+            transition: 0.15s;
+            white-space: nowrap;
+            border: 1px solid transparent;
+        }
+        .reset-today:hover {
+            background: #e2d0bd;
+            border-color: #bcaa93;
+        }
+        footer {
+            margin-top: 16px;
+            text-align: center;
+            color: #94806b;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>二十四节气 · 用香</h1>
+
+            <!-- 当前节气标识 -->
+            <div class="current-term">
+                <span>📆 今日节气</span>
+                <span class="current-label" id="currentTermDisplay">立春</span>
+            </div>
+
+            <!-- 动态内容区域 -->
+            <div id="termContent">
+                <!-- 由 JavaScript 填充 -->
+            </div>
+
+            <!-- 节气选择器 -->
+            <div class="selector-area">
+                <label for="termSelect">查看其他节气：</label>
+                <select id="termSelect"></select>
+                <button class="reset-today" id="backToToday">回到当前</button>
+            </div>
+            <footer>香方依据传统典籍整理 · 顺时用香</footer>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ---------- 节气数据 JSON (内联) ----------
+            const termData = [
+                { name: "立春", month: 2, day: 4, 
+                  scent: "春消息", 
+                  herbs: ["沉香", "檀香", "降真香", "丁香"], 
+                  effect: "疏肝理气，助阳气生发，宜于清晨书斋焚之。" },
+                { name: "雨水", month: 2, day: 19, 
+                  scent: "清露", 
+                  herbs: ["沉香", "白檀", "乳香", "龙脑"], 
+                  effect: "化湿醒脾，祛除春寒湿气，适合午后品茗时用。" },
+                { name: "惊蛰", month: 3, day: 5, 
+                  scent: "醒蛰", 
+                  herbs: ["沉香", "安息香", "丁香", "甘松"], 
+                  effect: "芳香辟秽，提振精神，驱散冬日沉浊。" },
+                { name: "春分", month: 3, day: 20, 
+                  scent: "中和", 
+                  herbs: ["沉香", "檀香", "零陵香", "白芷"], 
+                  effect: "调和阴阳，清雅平和，适宜静坐冥想。" },
+                { name: "清明", month: 4, day: 4, 
+                  scent: "怀思", 
+                  herbs: ["沉香", "柏子仁", "乳香", "苍术"], 
+                  effect: "清心明思，祛疫避秽，契合追远之情。" },
+                { name: "谷雨", month: 4, day: 20, 
+                  scent: "润华", 
+                  herbs: ["沉香", "檀香", "牡丹皮", "甘松"], 
+                  effect: "健脾祛湿，助水谷运化，雨后独坐尤佳。" },
+                { name: "立夏", month: 5, day: 5, 
+                  scent: "长嬴", 
+                  herbs: ["沉香", "檀香", "薄荷", "龙脑"], 
+                  effect: "清心降火，养心护阳，午间小憩可用。" },
+                { name: "小满", month: 5, day: 21, 
+                  scent: "盈香", 
+                  herbs: ["沉香", "藿香", "佩兰", "豆蔻"], 
+                  effect: "化湿和中，防暑热身，适合劳作之后。" },
+                { name: "芒种", month: 6, day: 5, 
+                  scent: "耘香", 
+                  herbs: ["沉香", "艾叶", "菖蒲", "龙脑"], 
+                  effect: "驱蚊避疫，清透湿热，夏日黄昏最佳。" },
+                { name: "夏至", month: 6, day: 21, 
+                  scent: "长日", 
+                  herbs: ["沉香", "檀香", "荷叶", "丁香"], 
+                  effect: "养心安神，清解暑热，午时静心焚之。" },
+                { name: "小暑", month: 7, day: 7, 
+                  scent: "净暑", 
+                  herbs: ["沉香", "黄连木", "柏子", "乳香"], 
+                  effect: "清热除烦，安神定志，苦夏时节可用。" },
+                { name: "大暑", month: 7, day: 22, 
+                  scent: "伏香", 
+                  herbs: ["沉香", "檀香", "香薷", "白芷"], 
+                  effect: "祛湿解暑，开窍醒神，极热时不宜浓烈。" },
+                { name: "立秋", month: 8, day: 7, 
+                  scent: "秋容", 
+                  herbs: ["沉香", "降真香", "玉兰", "甘松"], 
+                  effect: "敛神润肺，收夏散之心，初秋傍晚焚用。" },
+                { name: "处暑", month: 8, day: 23, 
+                  scent: "涤残", 
+                  herbs: ["沉香", "檀香", "乳香", "龙脑"], 
+                  effect: "清肺涤浊，化解残暑湿气，宜于书斋。" },
+                { name: "白露", month: 9, day: 7, 
+                  scent: "凝露", 
+                  herbs: ["沉香", "檀香", "桂花", "零陵香"], 
+                  effect: "润燥收神，助肺气清肃，晨起焚之最佳。" },
+                { name: "秋分", month: 9, day: 22, 
+                  scent: "均和", 
+                  herbs: ["沉香", "白檀", "菊花", "柏子"], 
+                  effect: "平衡阴阳，安和脏腑，秋夜静坐可用。" },
+                { name: "寒露", month: 10, day: 8, 
+                  scent: "寒芳", 
+                  herbs: ["沉香", "檀香", "辛夷", "丁香"], 
+                  effect: "温散风寒，通鼻窍，深秋阴雨时焚。" },
+                { name: "霜降", month: 10, day: 23, 
+                  scent: "凝香", 
+                  herbs: ["沉香", "乳香", "龙脑", "安息香"], 
+                  effect: "暖肾固元，抵御寒邪，晚课用为佳。" },
+                { name: "立冬", month: 11, day: 7, 
+                  scent: "潜阳", 
+                  herbs: ["沉香", "檀香", "肉桂", "丁香"], 
+                  effect: "温补下元，潜藏阳气，入夜焚之暖身。" },
+                { name: "小雪", month: 11, day: 22, 
+                  scent: "清寂", 
+                  herbs: ["沉香", "柏子", "甘松", "零陵香"], 
+                }
+            ]
+            }
+        )
+        

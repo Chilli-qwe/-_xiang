@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>千年香脉 · 香精香料历史卷轴（延长版）</title>
+    <style>
+        /* 样式与之前完全一致，保持卷轴风格 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', 'Times New Roman', '宋体', serif;
+        }
+
+        body {
+            background: #4a3729;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .scroll-container {
+            max-width: 1100px;
+            width: 100%;
+            background: #e9dacb;
+            border-radius: 0 40px 0 40px;
+            box-shadow: 0 30px 40px rgba(0,0,0,0.3);
+            display: flex;
+            position: relative;
+            border-left: 18px solid #8b6f50;
+            border-right: 18px solid #8b6f50;
+            border-image: repeating-linear-gradient(45deg, #aa8c6c, #7b5f42 15px) 30 stretch;
+            background-clip: padding-box;
+        }
+
+        .scroll-content {
+            flex: 1;
+            background: #fcf6e8;
+            padding: 40px 35px;
+            border-radius: 0 20px 0 20px;
+            box-shadow: inset 0 0 30px rgba(160, 120, 80, 0.15);
+            background-image: 
+                linear-gradient(rgba(200, 170, 140, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(200, 170, 140, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+            max-height: 80vh;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .title-section {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px dashed #b2906e;
+            padding-bottom: 20px;
+        }
+        .title-section h1 {
+            font-size: 2.8rem;
+            font-weight: normal;
+            color: #4b3621;
+            letter-spacing: 6px;
+            text-shadow: 2px 2px 0 #dccbb8;
+            margin-bottom: 10px;
+        }
+        .title-section .sub {
+            color: #7a5a3a;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 30px;
+            position: relative;
+            padding-left: 30px;
+            border-left: 3px solid #c5a26b;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -20px;
+            top: 0;
+            background: #b48b5a;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border: 2px solid #f0e1d0;
+        }
+
+        .timeline-period {
+            min-width: 110px;
+            font-weight: bold;
+            color: #5e3f28;
+            font-size: 1.2rem;
+            line-height: 1.4;
+            padding-right: 20px;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: rgba(255, 250, 240, 0.7);
+            padding: 16px 22px;
+            border-radius: 30px 8px 30px 8px;
+            border: 1px solid #e0ccb7;
+            box-shadow: 0 6px 12px rgba(140, 100, 60, 0.1);
+            transition: transform 0.2s;
+        }
+        .timeline-content:hover {
+            transform: translateY(-3px);
+            background: #fffcf5;
+        }
+
+        .timeline-content h3 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: #3b2c1d;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .timeline-content h3 span {
+            background: #c7ab89;
+            color: #2f2a1f;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: normal;
+        }
+        .timeline-desc {
+            color: #4b3e2e;
+            line-height: 1.7;
+            margin: 12px 0 14px;
+            font-size: 1.05rem;
+        }
+        .herb-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 18px;
+            margin-top: 12px;
+        }
+        .herb-tag {
+            background: #fff1e2;
+            border: 1px solid #bc9d7c;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            color: #543f2b;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .herb-tag::before {
+            content: "✦";
+            color: #a76934;
+            font-size: 1.1rem;
+        }
+
+        .footer-note {
+            margin-top: 50px;
+            text-align: right;
+            color: #a28366;
+            font-size: 0.95rem;
+            border-top: 1px dashed #d4bc9e;
+            padding-top: 20px;
+            font-style: italic;
+        }
+
+        .scroll-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .scroll-content::-webkit-scrollbar-track {
+            background: #ecdac8;
+            border-radius: 10px;
+        }
+        .scroll-content::-webkit-scrollbar-thumb {
+            background: #b58f6b;
+            border-radius: 10px;
+            border: 1px solid #8f6d4c;
+        }
+
+        @media (max-width: 700px) {
+            .scroll-container {
+                border-left-width: 8px;
+                border-right-width: 8px;
+            }
+            .scroll-content {
+                padding: 25px 15px;
+            }
+            .title-section h1 {
+                font-size: 2rem;
+                letter-spacing: 3px;
+            }
+            .timeline-item {
+                padding-left: 20px;
+            }
+            .timeline-period {
+                min-width: 70px;
+                font-size: 1rem;
+            }
+            .timeline-content h3 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-container">
+        <div class="scroll-content">
+            <div class="title-section">
+                <h1>千年香脉</h1>
+                <div class="sub">香精香料 · 历史卷轴（延长版）</div>
+            </div>
+
+            <!-- ================= 扩充后的时间线 ================= -->
+            <!-- 1. 史前 · 燎祭 -->
+            <div class="timeline-item">
+                <div class="timeline-marker">🔥</div>
+                <div class="timeline-period">史前 · 燎祭<br><small>前8000~前2000</small></div>
+                <div class="timeline-content">
+                    <h3>香之始 <span>燎祭·神灵之享</span></h3>
+                    <div class="timeline-desc">
+                        新石器时代先民焚烧艾草、松柏等芳香植物，以烟通达天神。辽宁牛河梁红山文化遗址发现燎祭遗迹，开启华夏用香先河。
+                    </div>
+                    <div class="herb-tags">
+                        <span class="herb-tag">艾草</span>
+                        <span class="herb-tag">松针</span>
+                        <span class="herb-tag">柏叶</span>
+                        <span class="herb-tag">蒿</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 夏商周 · 祭祀与佩带 -->
+            <div class="timeline-item">
+                <div class="timeline-marker">🌿</div>
+                <div class="timeline-period">夏商周<br><small>前2070~前256</small></div>
+                <div class="timeline-content">
+                    <h3>香之礼 <span>禋祀·郁鬯</span></h3>
+                    <div class="timeline-desc">
+                        殷商甲骨文有“鬯其酒”记载，以郁金草合黍酿成香酒用于祭祀。《周礼》设“郁人”“鬯人”掌香酒。佩兰、沐兰风俗形成。
+                    </div>
+                    <div class="herb-tags">
+                        <span class="herb-tag">郁金</span>
+                        <span class="herb-tag">兰草</span>
+                        <span class="herb-tag">萧</span>
+                        <span class="herb-tag">艾</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 春秋战国 · 君子佩香 -->
+            <div class="timeline-item">
+                <div class="timeline-marker">🍃</div>
+                <div class="timeline-period">春秋战国<br><small>前770~前221</small></div>
+                <div class="timeline-content">
+                    <h3>香之德 <span>屈原·纫秋兰</span></h3>
+                    <div class="timeline-desc">
+                        《诗经》《楚辞》大量出现香草描写，“扈江离与辟芷兮，纫秋兰以为佩”。香草成为君子品德的象征，佩戴、熏烧并用。
+                    </div>
+                    <div class="herb-tags">
+                        <span class="herb-tag">江离</span>
+                        <span class="herb-tag">辟芷</span>
+                        <span class="herb-tag">秋兰</span>
+                        <span class="herb-tag">申椒</span>
+                        <span class="herb-tag">菌桂</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. 秦汉 · 丝绸之路开通 -->
+            <div class="timeline-item">
+                <div class="timeline-marker">🐫</div>
+                <div class="timeline-period">秦汉<br><small>前221~220</small></div>
+                <div class="timeline-content">
+                    <h3>香之通 <span>博山炉·乳香</span></h3>
+                    <div class="timeline-desc">
+                        张骞凿空西域，乳香、苏合香、安息香等传入中原。武帝好仙，博山炉盛行，象征海上仙山。香药开始用于宫廷和贵族生活。
+                    </div>
+                    <div class="herb-tags">
+                        <span class="herb-tag">乳香</span>
+                        <span class="herb-tag">苏合香</span>
+                        <span class="herb-tag">沉香</span>
+                        <span class="herb-tag">龙脑</span>
+                        <span class="herb-tag">鸡舌香</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. 魏晋 · 合香萌芽 -->
+            <div class="timeline-item">
+                <div class="timeline-marker">📚</div>
+          

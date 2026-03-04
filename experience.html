@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>非遗香韵 - 体验</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 可以放一些页面专属样式，或者直接写在 style.css 里 */
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">非遗香韵</div>
+        <ul class="nav-links">
+            <li><a href="index.html">首页</a></li>
+            <li><a href="history.html">历史</a></li>
+            <li><a href="skill.html">技艺</a></li>
+            <li><a href="material.html">香材</a></li>
+            <li><a href="experience.html">体验</a></li>
+            <li><a href="about.html">关于</a></li>
+        </ul>
+    </nav>
+
+    <section id="experience">
+        <h2>线上雅集</h2>
+        <p style="margin-bottom: 30px;">今日节气 · 专属香方</p>
+
+        <!-- 推荐卡片容器 -->
+        <div id="term-recommendation" class="term-card">
+            <!-- 动态填充 -->
+        </div>
+
+        <!-- 刷新按钮 -->
+        <button class="ink-btn" id="refresh-term">再问一香</button>
+    </section>
+
+    <script>
+        // 节气数据
+        const solarTermsData = [
+{ name: "惊蛰", date: "0305", fang: "醒蛰", materials: ["龙脑", "薄荷", "艾叶"], effect: "新雷惊梦，桃夭灼灼其鸣" },
+
+{ name: "春分", date: "0320", fang: "中和", materials: ["檀香", "乳香", "安息香"], effect: "玄鸟至止，阴阳均分短长" },
+
+{ name: "清明", date: "0404", fang: "清心", materials: ["柏子仁", "甘松", "白芷"], effect: "桐花半亩，田鼠化鴽作尘" },
+
+{ name: "谷雨", date: "0420", fang: "雨前", materials: ["沉香", "丁香", "藿香"], effect: "萍生浮翠，戴胜降于桑林" },
+
+{ name: "立夏", date: "0505", fang: "夏长", materials: ["薄荷", "龙脑", "艾纳香"], effect: "蝼蝈鸣夜，王瓜攀援东墙" },
+
+{ name: "小满", date: "0521", fang: "小满", materials: ["沉香", "檀香", "乳香"], effect: "苦菜花开，靡草死处微凉" },
+
+{ name: "芒种", date: "0605", fang: "忙种", materials: ["艾叶", "菖蒲", "白芷"], effect: "螳螂破壳，鵙始鸣于高枝" },
+
+{ name: "夏至", date: "0621", fang: "极阳", materials: ["沉香", "龙脑", "薄荷"], effect: "鹿角解落，蜩鸣日永迟迟" },
+
+{ name: "小暑", date: "0707", fang: "消暑", materials: ["薄荷", "龙脑", "香薷"], effect: "温风入户，蟋蟀居壁潜形" },
+
+{ name: "大暑", date: "0722", fang: "大热", materials: ["沉香", "檀香", "丁香"], effect: "腐草化萤，土润溽暑蒸腾" },
+
+{ name: "立秋", date: "0807", fang: "秋收", materials: ["沉香", "降真香", "甘松"], effect: "凉风至矣，寒蝉咽露初秋" },
+
+{ name: "处暑", date: "0823", fang: "出暑", materials: ["沉香", "檀香", "乳香"], effect: "鹰乃祭鸟，天地始肃清幽" },
+
+{ name: "白露", date: "0907", fang: "凝露", materials: ["沉香", "丁香", "白芷"], effect: "鸿雁来宾，玄鸟南归故洲" },
+
+{ name: "秋分", date: "0922", fang: "均平", materials: ["檀香", "乳香", "安息香"], effect: "雷声收尽，蛰虫培户深藏" },
+
+{ name: "寒露", date: "1008", fang: "寒香", materials: ["沉香", "丁香", "肉桂"], effect: "菊有黄华，鸿雁来宾成行" },
+
+{ name: "霜降", date: "1023", fang: "霜华", materials: ["沉香", "檀香", "甘松"], effect: "豺祭于野，草木摇落露凉" },
+
+{ name: "立冬", date: "1107", fang: "冬藏", materials: ["沉香", "檀香", "肉桂"], effect: "水始冰坚，地冻如铁凝霜" },
+
+{ name: "小雪", date: "1122", fang: "小雪", materials: ["沉香", "丁香", "艾叶"], effect: "虹藏不见，天气上升地降" },
+
+{ name: "大雪", date: "1207", fang: "大雪", materials: ["沉香", "檀香", "龙脑"], effect: "鹖鴠不鸣，虎始交时雪扬" },
+
+{ name: "冬至", date: "1221", fang: "一阳", materials: ["沉香", "檀香", "乳香"], effect: "蚯蚓犹结，麋角解处阳生" },
+
+{ name: "小寒", date: "0105", fang: "小寒", materials: ["沉香", "丁香", "肉桂"], effect: "雁北乡远，鹊始巢于新杈" },
+
+{ name: "大寒", date: "0120", fang: "大寒", materials: ["沉香", "檀香", "甘松"], effect: "鸡乳育也，征鸟厉疾天涯" }
+    ]
+        function getCurrentSolarTerm() {
+            const today = new Date();
+            const month = today.getMonth() + 1;
+            const day = today.getDate();
+            const todayStr = `${month.toString().padStart(2, '0')}${day.toString().padStart(2, '0')}`;
+            const sorted = [...solarTermsData].sort((a, b) => a.date.localeCompare(b.date));
+            let term = sorted.find(item => item.date >= todayStr);
+            if (!term) term = sorted[0];
+            return term;
+        }
+
+        function renderRecommendation(term) {
+            const container = document.getElementById('term-recommendation');
+            if (!term) {
+                container.innerHTML = '<p style="text-align:center; color: var(--mist-light);">暂无推荐</p>';
+                return;
+            }
+            const materialsHtml = term.materials.map(m => `<span class="material-tag">${m}</span>`).join('');
+            container.innerHTML = `
+                <div class="term-name">${term.name}</div>
+                <div class="term-fang">${term.fang}</div>
+                <div class="term-materials">${materialsHtml}</div>
+                <div class="term-effect">${term.effect}</div>
+            `;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const term = getCurrentSolarTerm();
+            renderRecommendation(term);
+
+            document.getElementById('refresh-term').addEventListener('click', () => {
+                // 重新获取当前节气（或随机）
+                const newTerm = getCurrentSolarTerm(); // 实际上可能和上次一样
+                // 如果想随机，可以：const randomIndex = Math.floor(Math.random() * solarTermsData.length);
+                // renderRecommendation(solarTermsData[randomIndex]);
+                renderRecommendation(newTerm); 
+            });
+        });
+    </script>
+</body>
+</html>
